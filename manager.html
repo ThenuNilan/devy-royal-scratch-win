@@ -1,0 +1,963 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#260611">
+  <meta
+    name="description"
+    content="DEVY Royal Scratch & Win campaign manager dashboard."
+  >
+  <title>DEVY | Royal Campaign Manager</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="manager.css">
+
+  <script src="manager.js" defer></script>
+</head>
+
+<body>
+  <div class="manager-ambient manager-ambient-one"></div>
+  <div class="manager-ambient manager-ambient-two"></div>
+  <div class="manager-particles" id="managerParticles"></div>
+
+  <!-- ======================================================
+       MANAGER LOGIN
+  ======================================================= -->
+
+  <main id="loginScreen" class="login-screen">
+    <section class="login-card">
+      <a class="login-logo" href="index.html" aria-label="DEVY home">
+        <img
+          src="https://devy.lk/logo/final%20logo%20png.png"
+          alt="DEVY official logo"
+          onerror="this.style.display='none'"
+        >
+      </a>
+
+      <div class="login-ornament" aria-hidden="true">✦</div>
+
+      <p class="eyebrow">PRIVATE MANAGEMENT ACCESS</p>
+
+      <h1>Royal <em>Control.</em></h1>
+
+      <p class="login-description">
+        Access the DEVY Royal Scratch & Win campaign dashboard.
+      </p>
+
+      <form id="loginForm" class="login-form">
+        <label for="managerPassword">Manager password</label>
+
+        <div class="password-field">
+          <input
+            id="managerPassword"
+            name="managerPassword"
+            type="password"
+            placeholder="Enter manager password"
+            autocomplete="current-password"
+            required
+          >
+
+          <button
+            type="button"
+            id="togglePassword"
+            class="password-toggle"
+            aria-label="Show or hide password"
+          >
+            SHOW
+          </button>
+        </div>
+
+        <button class="gold-button" type="submit">
+          <span>Enter dashboard</span>
+          <span aria-hidden="true">↗</span>
+        </button>
+
+        <p
+          id="loginError"
+          class="login-error"
+          role="alert"
+          aria-live="polite"
+        ></p>
+      </form>
+
+      <div class="login-security-note">
+        <span aria-hidden="true">✧</span>
+        <p>
+          Demo access only. Browser-based passwords are not secure
+          authentication for a live campaign.
+        </p>
+      </div>
+
+      <a class="back-home-link" href="index.html">
+        ← Return to the customer experience
+      </a>
+    </section>
+  </main>
+
+  <!-- ======================================================
+       MANAGER APPLICATION
+  ======================================================= -->
+
+  <div id="managerApp" class="manager-app hidden">
+
+    <!-- TOP NAVIGATION -->
+
+    <header class="manager-header">
+      <div class="manager-brand">
+        <a href="index.html" class="manager-logo">
+          <img
+            src="https://devy.lk/logo/final%20logo%20png.png"
+            alt="DEVY official logo"
+            onerror="this.style.display='none'"
+          >
+        </a>
+
+        <div class="brand-divider"></div>
+
+        <div class="brand-heading">
+          <span class="brand-kicker">ROYAL CAMPAIGN</span>
+          <span class="brand-title">Management Suite</span>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="campaign-status">
+          <span class="status-dot"></span>
+          <span>Campaign dashboard</span>
+        </div>
+
+        <button
+          id="refreshDashboard"
+          class="icon-button"
+          type="button"
+          title="Refresh dashboard"
+          aria-label="Refresh dashboard"
+        >
+          ↻
+        </button>
+
+        <button
+          id="logoutButton"
+          class="logout-button"
+          type="button"
+        >
+          <span>Log out</span>
+          <span aria-hidden="true">↗</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-container">
+
+      <!-- PAGE INTRODUCTION -->
+
+      <section class="dashboard-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">WELCOME TO YOUR CONTROL ROOM</p>
+
+          <h1>Every detail, <em>beautifully managed.</em></h1>
+
+          <p class="dashboard-description">
+            Monitor campaign entries, review scratch-card results,
+            manage prize inventory and verify redemption records.
+          </p>
+        </div>
+
+        <div class="hero-date-card">
+          <span class="hero-date-label">TODAY</span>
+          <strong id="currentDate">—</strong>
+          <span id="currentTime">—</span>
+        </div>
+      </section>
+
+      <!-- NAVIGATION TABS -->
+
+      <nav class="dashboard-tabs" aria-label="Dashboard sections">
+        <button
+          class="dashboard-tab active"
+          type="button"
+          data-view="overview"
+          aria-current="page"
+        >
+          <span class="tab-icon">◈</span>
+          <span>Overview</span>
+        </button>
+
+        <button
+          class="dashboard-tab"
+          type="button"
+          data-view="customers"
+        >
+          <span class="tab-icon">♙</span>
+          <span>Customers</span>
+        </button>
+
+        <button
+          class="dashboard-tab"
+          type="button"
+          data-view="inventory"
+        >
+          <span class="tab-icon">✧</span>
+          <span>Inventory</span>
+        </button>
+
+        <button
+          class="dashboard-tab"
+          type="button"
+          data-view="redemptions"
+        >
+          <span class="tab-icon">◇</span>
+          <span>Redemptions</span>
+        </button>
+      </nav>
+
+      <!-- ==================================================
+           OVERVIEW VIEW
+      =================================================== -->
+
+      <section
+        id="overviewView"
+        class="dashboard-view"
+        data-dashboard-view="overview"
+      >
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CAMPAIGN PERFORMANCE</p>
+            <h2>The overview.</h2>
+          </div>
+
+          <span class="section-caption">LIVE FROM THIS BROWSER</span>
+        </div>
+
+        <!-- KPI CARDS -->
+
+        <div class="stats-grid">
+
+          <article class="stat-card">
+            <div class="stat-card-top">
+              <span class="stat-label">Total customers</span>
+              <span class="stat-icon">♙</span>
+            </div>
+
+            <strong class="stat-value" id="statCustomers">0</strong>
+
+            <p class="stat-footnote">
+              Registered campaign entries
+            </p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-card-top">
+              <span class="stat-label">Completed entries</span>
+              <span class="stat-icon">✦</span>
+            </div>
+
+            <strong class="stat-value" id="statCompleted">0</strong>
+
+            <p class="stat-footnote">
+              Customers who finished all five cards
+            </p>
+          </article>
+
+          <article class="stat-card stat-card-highlight">
+            <div class="stat-card-top">
+              <span class="stat-label">Winning prizes</span>
+              <span class="stat-icon">✧</span>
+            </div>
+
+            <strong class="stat-value" id="statWinners">0</strong>
+
+            <p class="stat-footnote">
+              Recorded winning prize cards
+            </p>
+          </article>
+
+          <article class="stat-card">
+            <div class="stat-card-top">
+              <span class="stat-label">Redeemed prizes</span>
+              <span class="stat-icon">◇</span>
+            </div>
+
+            <strong class="stat-value" id="statRedeemed">0</strong>
+
+            <p class="stat-footnote">
+              Marked as redeemed in this demo
+            </p>
+          </article>
+
+        </div>
+
+        <!-- SECONDARY SUMMARY -->
+
+        <div class="overview-grid">
+
+          <section class="content-card campaign-summary">
+            <div class="content-card-heading">
+              <div>
+                <p class="eyebrow">CAMPAIGN SNAPSHOT</p>
+                <h3>Campaign activity</h3>
+              </div>
+
+              <span class="heading-symbol">✦</span>
+            </div>
+
+            <div class="summary-list">
+
+              <div class="summary-row">
+                <span>Customers started</span>
+                <strong id="summaryStarted">0</strong>
+              </div>
+
+              <div class="summary-row">
+                <span>Customers completed</span>
+                <strong id="summaryCompleted">0</strong>
+              </div>
+
+              <div class="summary-row">
+                <span>Outstanding prize redemptions</span>
+                <strong id="summaryOutstanding">0</strong>
+              </div>
+
+              <div class="summary-row">
+                <span>Recorded prize value</span>
+                <strong id="summaryPrizeValue">LKR 0</strong>
+              </div>
+
+            </div>
+
+            <div class="summary-progress">
+              <div class="summary-progress-label">
+                <span>Completion rate</span>
+                <strong id="completionRate">0%</strong>
+              </div>
+
+              <div class="progress-track">
+                <div
+                  id="completionProgress"
+                  class="progress-fill"
+                ></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="content-card inventory-summary">
+            <div class="content-card-heading">
+              <div>
+                <p class="eyebrow">PRIZE AVAILABILITY</p>
+                <h3>Inventory at a glance</h3>
+              </div>
+
+              <button
+                class="text-action"
+                type="button"
+                data-navigate="inventory"
+              >
+                View all ↗
+              </button>
+            </div>
+
+            <div id="overviewInventory" class="mini-inventory-list">
+              <div class="empty-state compact">
+                <span class="empty-symbol">✧</span>
+                <p>Loading inventory…</p>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <!-- RECENT CUSTOMERS -->
+
+        <section class="content-card recent-customers">
+          <div class="content-card-heading">
+            <div>
+              <p class="eyebrow">LATEST ENTRIES</p>
+              <h3>Recently registered</h3>
+            </div>
+
+            <button
+              class="text-action"
+              type="button"
+              data-navigate="customers"
+            >
+              All customers ↗
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Guest number</th>
+                  <th>Registration</th>
+                  <th>Progress</th>
+                  <th>Results</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="recentCustomersBody">
+                <tr>
+                  <td colspan="6" class="table-empty">
+                    No customers registered yet.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- ==================================================
+           CUSTOMERS VIEW
+      =================================================== -->
+
+      <section
+        id="customersView"
+        class="dashboard-view hidden"
+        data-dashboard-view="customers"
+      >
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">CUSTOMER DIRECTORY</p>
+            <h2>Every guest, <em>in one place.</em></h2>
+            <p class="section-description">
+              Search customer names, addresses and guest numbers.
+            </p>
+          </div>
+        </div>
+
+        <section class="content-card">
+          <div class="filter-toolbar">
+            <div class="search-field">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+
+              <input
+                id="customerSearch"
+                type="search"
+                placeholder="Search name, address or guest number…"
+                autocomplete="off"
+                aria-label="Search customers"
+              >
+            </div>
+
+            <select
+              id="customerStatusFilter"
+              class="filter-select"
+              aria-label="Filter customers by completion"
+            >
+              <option value="all">All customers</option>
+              <option value="completed">Completed</option>
+              <option value="incomplete">In progress</option>
+            </select>
+
+            <button
+              id="exportCustomersButton"
+              class="outline-button"
+              type="button"
+            >
+              Export CSV ↗
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Guest</th>
+                  <th>Customer details</th>
+                  <th>Registered</th>
+                  <th>Cards</th>
+                  <th>Prize status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="customersTableBody">
+                <tr>
+                  <td colspan="6" class="table-empty">
+                    No customer records found.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <span id="customerCountLabel">0 customers</span>
+
+            <button
+              id="clearCustomerSearch"
+              class="text-action"
+              type="button"
+            >
+              Clear search
+            </button>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- ==================================================
+           INVENTORY VIEW
+      =================================================== -->
+
+      <section
+        id="inventoryView"
+        class="dashboard-view hidden"
+        data-dashboard-view="inventory"
+      >
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">PRIZE STOCK CONTROL</p>
+            <h2>Every prize, <em>accounted for.</em></h2>
+            <p class="section-description">
+              Review remaining quantities and update the demo stock.
+            </p>
+          </div>
+
+          <button
+            id="resetInventoryButton"
+            class="outline-button"
+            type="button"
+          >
+            Reset demo stock
+          </button>
+        </div>
+
+        <div class="inventory-warning">
+          <span class="warning-symbol">!</span>
+
+          <div>
+            <strong>Demo inventory only</strong>
+            <p>
+              Changes in this dashboard are stored in this browser.
+              A live campaign needs server-side inventory enforcement
+              to prevent overselling.
+            </p>
+          </div>
+        </div>
+
+        <div class="inventory-stats-grid">
+
+          <article class="inventory-stat">
+            <span>Initial listed prizes</span>
+            <strong id="inventoryInitialCount">30</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Remaining prizes</span>
+            <strong id="inventoryRemainingCount">30</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Prizes allocated</span>
+            <strong id="inventoryAllocatedCount">0</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Remaining listed value</span>
+            <strong id="inventoryRemainingValue">LKR 32,600</strong>
+          </article>
+
+        </div>
+
+        <section class="content-card">
+          <div class="content-card-heading">
+            <div>
+              <p class="eyebrow">STOCK REGISTER</p>
+              <h3>Prize inventory</h3>
+            </div>
+
+            <span class="section-caption">LKR VALUES</span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table inventory-table">
+              <thead>
+                <tr>
+                  <th>Prize</th>
+                  <th>Unit value</th>
+                  <th>Initial quantity</th>
+                  <th>Remaining</th>
+                  <th>Allocated</th>
+                  <th>Stock status</th>
+                  <th>Manage</th>
+                </tr>
+              </thead>
+
+              <tbody id="inventoryTableBody">
+                <tr>
+                  <td colspan="7" class="table-empty">
+                    Loading inventory…
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="content-card keytag-card">
+          <div class="keytag-icon">✦</div>
+
+          <div class="keytag-copy">
+            <p class="eyebrow">SPECIAL CAMPAIGN GIFT</p>
+            <h3>DEVY Key Tag</h3>
+            <p>
+              Key Tag stock quantity has not yet been confirmed.
+              Do not assume unlimited stock or promise a physical gift
+              until the campaign inventory is verified.
+            </p>
+          </div>
+
+          <div class="keytag-status">
+            <span class="status-pill status-pending">
+              Stock unconfirmed
+            </span>
+
+            <span class="keytag-note">
+              Requires verified stock
+            </span>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- ==================================================
+           REDEMPTIONS VIEW
+      =================================================== -->
+
+      <section
+        id="redemptionsView"
+        class="dashboard-view hidden"
+        data-dashboard-view="redemptions"
+      >
+
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">PRIZE VERIFICATION</p>
+            <h2>From winning, <em>to redeemed.</em></h2>
+            <p class="section-description">
+              Verify prize codes and review redemption records.
+            </p>
+          </div>
+        </div>
+
+        <section class="content-card redemption-search-card">
+          <div class="content-card-heading">
+            <div>
+              <p class="eyebrow">CODE LOOKUP</p>
+              <h3>Find a redemption code</h3>
+            </div>
+
+            <span class="heading-symbol">◇</span>
+          </div>
+
+          <form id="redemptionSearchForm" class="redemption-search-form">
+            <div class="search-field">
+              <span class="search-icon" aria-hidden="true">⌕</span>
+
+              <input
+                id="redemptionCodeSearch"
+                type="search"
+                placeholder="Enter the customer's prize code…"
+                autocomplete="off"
+                required
+              >
+            </div>
+
+            <button class="gold-button redemption-search-button" type="submit">
+              <span>Verify code</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+
+          <div
+            id="redemptionLookupResult"
+            class="redemption-lookup-result hidden"
+            aria-live="polite"
+          ></div>
+        </section>
+
+        <div class="redemption-stats-grid">
+
+          <article class="inventory-stat">
+            <span>Unredeemed prizes</span>
+            <strong id="unredeemedCount">0</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Redeemed prizes</span>
+            <strong id="redeemedCount">0</strong>
+          </article>
+
+          <article class="inventory-stat">
+            <span>Total winning codes</span>
+            <strong id="totalCodesCount">0</strong>
+          </article>
+
+        </div>
+
+        <section class="content-card">
+          <div class="content-card-heading">
+            <div>
+              <p class="eyebrow">REDEMPTION REGISTER</p>
+              <h3>Winning prize records</h3>
+            </div>
+
+            <select
+              id="redemptionStatusFilter"
+              class="filter-select"
+              aria-label="Filter redemptions"
+            >
+              <option value="all">All records</option>
+              <option value="pending">Not redeemed</option>
+              <option value="redeemed">Redeemed</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Redemption code</th>
+                  <th>Customer</th>
+                  <th>Prize</th>
+                  <th>Guest number</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="redemptionsTableBody">
+                <tr>
+                  <td colspan="6" class="table-empty">
+                    No prize codes recorded yet.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </section>
+
+      <!-- ==================================================
+           SHARED CUSTOMER DETAIL MODAL
+      =================================================== -->
+
+      <div
+        id="customerModal"
+        class="modal-overlay hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="customerModalTitle"
+      >
+        <section class="modal-card">
+          <div class="modal-header">
+            <div>
+              <p class="eyebrow">CUSTOMER RECORD</p>
+              <h2 id="customerModalTitle">Guest details</h2>
+            </div>
+
+            <button
+              id="closeCustomerModal"
+              class="modal-close"
+              type="button"
+              aria-label="Close customer details"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="customerModalContent" class="modal-content">
+            <p class="muted-text">Select a customer to view details.</p>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              id="modalCloseButton"
+              class="outline-button"
+              type="button"
+            >
+              Close
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================================================
+           INVENTORY EDIT MODAL
+      =================================================== -->
+
+      <div
+        id="inventoryModal"
+        class="modal-overlay hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="inventoryModalTitle"
+      >
+        <section class="modal-card modal-card-small">
+          <div class="modal-header">
+            <div>
+              <p class="eyebrow">STOCK MANAGEMENT</p>
+              <h2 id="inventoryModalTitle">Update quantity</h2>
+            </div>
+
+            <button
+              id="closeInventoryModal"
+              class="modal-close"
+              type="button"
+              aria-label="Close inventory editor"
+            >
+              ×
+            </button>
+          </div>
+
+          <form id="inventoryEditForm" class="inventory-edit-form">
+            <input id="inventoryPrizeId" type="hidden">
+
+            <div class="form-field">
+              <label for="inventoryPrizeName">Prize</label>
+
+              <input
+                id="inventoryPrizeName"
+                type="text"
+                readonly
+              >
+            </div>
+
+            <div class="form-field">
+              <label for="inventoryNewQuantity">
+                New remaining quantity
+              </label>
+
+              <input
+                id="inventoryNewQuantity"
+                type="number"
+                min="0"
+                max="10000"
+                step="1"
+                required
+              >
+            </div>
+
+            <p class="modal-help">
+              This changes demo inventory in this browser only.
+            </p>
+
+            <button class="gold-button" type="submit">
+              <span>Save inventory</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+          </form>
+        </section>
+      </div>
+
+      <!-- ==================================================
+           REDEMPTION CONFIRMATION MODAL
+      =================================================== -->
+
+      <div
+        id="redemptionModal"
+        class="modal-overlay hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="redemptionModalTitle"
+      >
+        <section class="modal-card modal-card-small">
+          <div class="modal-header">
+            <div>
+              <p class="eyebrow">PRIZE REDEMPTION</p>
+              <h2 id="redemptionModalTitle">Confirm redemption</h2>
+            </div>
+
+            <button
+              id="closeRedemptionModal"
+              class="modal-close"
+              type="button"
+              aria-label="Close redemption confirmation"
+            >
+              ×
+            </button>
+          </div>
+
+          <div id="redemptionModalContent" class="modal-content">
+            <p class="muted-text">
+              Review the winning record before confirming redemption.
+            </p>
+          </div>
+
+          <div class="modal-footer modal-footer-split">
+            <button
+              id="cancelRedemptionButton"
+              class="outline-button"
+              type="button"
+            >
+              Cancel
+            </button>
+
+            <button
+              id="confirmRedemptionButton"
+              class="gold-button"
+              type="button"
+            >
+              <span>Confirm redemption</span>
+              <span aria-hidden="true">✓</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================================================
+           GLOBAL TOAST
+      =================================================== -->
+
+      <div
+        id="managerToast"
+        class="manager-toast"
+        role="status"
+        aria-live="polite"
+      ></div>
+
+      <!-- ==================================================
+           FOOTER
+      =================================================== -->
+
+      <footer class="manager-footer">
+        <div class="footer-line"></div>
+
+        <p class="footer-brand">
+          DEVY <span>·</span> Royal Campaign Management
+        </p>
+
+        <p class="footer-note">
+          A premium campaign experience, managed with care.
+        </p>
+
+        <p class="footer-disclaimer">
+          Local demo dashboard. Not suitable for production security
+          or authoritative prize allocation.
+        </p>
+      </footer>
+
+    </main>
+  </div>
+</body>
+</html>
